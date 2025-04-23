@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'eclipse'
+    id 'org.springframework.boot' version '2.7.13' // Java 1.8과 호환되는 Spring Boot 버전 사용
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE' // Spring Dependency Management 플러그인
+    id 'com.github.johnrengelman.shadow' version '7.1.2' // 최신 버전 사용
+}
+
+def jdk8 = '1.8'
+sourceCompatibility = jdk8
+targetCompatibility = jdk8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation fileTree(dir: 'src/main/resources/libs', include: ['*.jar'])
+    
+    // JUnit 및 Spring Boot Test 종속성 추가
+    testImplementation 'org.springframework.boot:spring-boot-starter-test' 
+}
+
+configurations {
+    all {
+        exclude module: 'commons-logging'
+    }
+}
+
+application {
+    mainClass = 'com.example.demo.LogorganizeApplication'
+}
+
+jar {
+    archivesBaseName = 'logorganize'
+
+    manifest {
+        attributes 'Main-Class': 'com.example.demo.LogorganizeApplication'
+    }
+}
